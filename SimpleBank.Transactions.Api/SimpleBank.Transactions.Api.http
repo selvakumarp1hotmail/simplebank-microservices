@@ -1,0 +1,6 @@
+@SimpleBank.Transactions.Api_HostAddress = http://localhost:5166
+
+GET {{SimpleBank.Transactions.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

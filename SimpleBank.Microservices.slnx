@@ -1,0 +1,18 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Account Service/">
+    <Project Path="SimpleBank.Accounts.Api/SimpleBank.Accounts.Api.csproj" Id="8b401aa2-4d8a-4879-8045-6b45900654e4" />
+  </Folder>
+  <Folder Name="/src/BuildingBlocks/" />
+  <Folder Name="/src/Frontend/" />
+  <Folder Name="/src/Gateway/">
+    <Project Path="GateWay/GateWay.csproj" Id="60a37ec6-3cec-46b7-8d7e-c8f32a4ade54" />
+  </Folder>
+  <Folder Name="/src/Services/">
+    <Project Path="SimpleBank.Customer.Api/SimpleBank.Customers.Api.csproj" Id="a3c5ecbb-2f38-4829-8415-9019efbac397" />
+    <Project Path="SimpleBank.Transactions.Api/SimpleBank.Transactions.Api.csproj" Id="7be4f1d6-1e49-40c7-b3b9-a080ff21f765" />
+  </Folder>
+  <Folder Name="/src/Shared Library/">
+    <Project Path="SimpleBank.Shared/SimpleBank.Shared.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,23 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "GateWay\\GateWay.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "SimpleBank.Customer.Api\\SimpleBank.Customers.Api.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "SimpleBank.Accounts.Api\\SimpleBank.Accounts.Api.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "SimpleBank.Transactions.Api\\SimpleBank.Transactions.Api.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
