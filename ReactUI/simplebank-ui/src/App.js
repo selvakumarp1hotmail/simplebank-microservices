@@ -35,7 +35,7 @@ function App() {
 
   return (
     <div className="container">
-      <h1>🏦 SELVA's -Simple Bank Dashboard</h1>
+      <h1>🏦 SELVA's -Test Bank Dashboard</h1>
 
       {/* ✅ TRANSACTION FORM */}
       <div className="card">
