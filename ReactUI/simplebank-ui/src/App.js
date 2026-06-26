@@ -39,7 +39,7 @@ function App() {
 
       {/* ✅ TRANSACTION FORM */}
       <div className="card">
-        <h2>💰 Add Transaction</h2>
+        <h2>💰 Transaction: Deposit/WithDraw</h2>
 
         <input
           type="number"
