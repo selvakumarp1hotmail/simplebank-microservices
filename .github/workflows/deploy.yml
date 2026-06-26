@@ -58,3 +58,18 @@ jobs:
       run: |
         aws eks update-kubeconfig --region ap-southeast-1 --name simplebank-cluster
         kubectl apply -f k8s/
+
+#  Deploy to Kubernetes
+    - name: Deploy to EKS
+      run: |
+        aws eks update-kubeconfig --region ap-southeast-1 --name simplebank-cluster
+        kubectl apply -f k8s/
+
+    #  FORCE RESTART (VERY IMPORTANT)
+    - name: Restart deployments
+      run: |
+        kubectl rollout restart deployment customer-api
+        kubectl rollout restart deployment account-api
+        kubectl rollout restart deployment transaction-api
+        kubectl rollout restart deployment gateway
+        kubectl rollout restart deployment web-ui
