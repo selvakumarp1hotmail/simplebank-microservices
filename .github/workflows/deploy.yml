@@ -30,41 +30,46 @@ jobs:
         aws ecr get-login-password --region ap-southeast-1 \
         | docker login --username AWS --password-stdin 175562787706.dkr.ecr.ap-southeast-1.amazonaws.com
 
-    # ✅ Build & Push Customer API
+    # ✅ Build & Push Images
     - name: Build & Push Customer API
       run: |
         docker build -t customer-api -f SimpleBank.Customer.Api/Dockerfile .
-        docker tag customer-api:latest 175562787706.dkr.ecr.ap-southeast-1.amazonaws.com/customer-api:latest
-        docker push 175562787706.dkr.ecr.ap-southeast-1.amazonaws.com/customer-api:latest
+        docker tag customer-api:latest 175562787706.dkr.ecr.ap-southeast-1.amazonaws.com/customer-api:v1-${{ github.run_number }}
+        docker push 175562787706.dkr.ecr.ap-southeast-1.amazonaws.com/customer-api:v1-${{ github.run_number }}
 
-    # ✅ Build & Push Account API
     - name: Build & Push Account API
       run: |
         docker build -t account-api -f SimpleBank.Accounts.Api/Dockerfile .
-        docker tag account-api:latest 175562787706.dkr.ecr.ap-southeast-1.amazonaws.com/account-api:latest
-        docker push 175562787706.dkr.ecr.ap-southeast-1.amazonaws.com/account-api:latest
+        docker tag account-api:latest 175562787706.dkr.ecr.ap-southeast-1.amazonaws.com/account-api:v1-${{ github.run_number }}
+        docker push 175562787706.dkr.ecr.ap-southeast-1.amazonaws.com/account-api:v1-${{ github.run_number }}
 
-    # ✅ Build & Push Transaction API
     - name: Build & Push Transaction API
       run: |
         docker build -t transaction-api -f SimpleBank.Transactions.Api/Dockerfile .
-        docker tag transaction-api:latest 175562787706.dkr.ecr.ap-southeast-1.amazonaws.com/transaction-api:latest
-        docker push 175562787706.dkr.ecr.ap-southeast-1.amazonaws.com/transaction-api:latest
+        docker tag transaction-api:latest 175562787706.dkr.ecr.ap-southeast-1.amazonaws.com/transaction-api:v1-${{ github.run_number }}
+        docker push 175562787706.dkr.ecr.ap-southeast-1.amazonaws.com/transaction-api:v1-${{ github.run_number }}
 
-    # ✅ Build & Push React UI
     - name: Build & Push React UI
       run: |
         docker build -t react-ui ./ReactUI/simplebank-ui
-        docker tag react-ui:latest 175562787706.dkr.ecr.ap-southeast-1.amazonaws.com/react-ui:latest
-        docker push 175562787706.dkr.ecr.ap-southeast-1.amazonaws.com/react-ui:latest
+        docker tag react-ui:latest 175562787706.dkr.ecr.ap-southeast-1.amazonaws.com/react-ui:v1-${{ github.run_number }}
+        docker push 175562787706.dkr.ecr.ap-southeast-1.amazonaws.com/react-ui:v1-${{ github.run_number }}
 
-    # ✅ Deploy to Kubernetes
+    # ✅ 🔥 UPDATE KUBERNETES YAML WITH NEW VERSION
+    - name: Update Image Tags in Kubernetes YAML
+      run: |
+        sed -i "s|customer-api:.*|customer-api:v1-${{ github.run_number }}|g" k8s/customer-deployment.yaml
+        sed -i "s|account-api:.*|account-api:v1-${{ github.run_number }}|g" k8s/account-deployment.yaml
+        sed -i "s|transaction-api:.*|transaction-api:v1-${{ github.run_number }}|g" k8s/transaction-deployment.yaml
+        sed -i "s|react-ui:.*|react-ui:v1-${{ github.run_number }}|g" k8s/webui-deployment.yaml
+
+    # ✅ Deploy
     - name: Deploy to EKS
       run: |
         aws eks update-kubeconfig --region ap-southeast-1 --name simplebank-cluster
         kubectl apply -f k8s/
 
-    # ✅ Force rollout (VERY IMPORTANT)
+    # ✅ Restart pods
     - name: Restart deployments
       run: |
         kubectl rollout restart deployment customer-api

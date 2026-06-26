@@ -35,11 +35,11 @@ function App() {
 
   return (
     <div className="container">
-      <h1>🏦 SELVA's -Test Bank Dashboard</h1>
+      <h1>🏦 SELVA's -Bank Dashboard</h1>
 
       {/* ✅ TRANSACTION FORM */}
       <div className="card">
-        <h2>💰 Transaction: Deposit/WithDraw</h2>
+        <h2>💰 Transaction: Deposit / WithDraw</h2>
 
         <input
           type="number"
