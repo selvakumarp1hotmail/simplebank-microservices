@@ -1,0 +1,42 @@
+services:
+
+  customer-api:
+    build:
+      context: .
+      dockerfile: SimpleBank.Customer.Api/Dockerfile
+    ports:
+      - "5001:80"
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=host.docker.internal;Database=SimpleBank_CustomersDb;User Id=Test;Password=Test123;TrustServerCertificate=True
+
+  account-api:
+    build:
+      context: .
+      dockerfile: SimpleBank.Accounts.Api/Dockerfile
+    ports:
+      - "5002:80"
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=host.docker.internal;Database=SimpleBank_AccountsDb;User Id=Test;Password=Test123;TrustServerCertificate=True
+
+  transaction-api:
+    build:
+      context: .
+      dockerfile: SimpleBank.Transactions.Api/Dockerfile
+    ports:
+      - "5003:80"
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=host.docker.internal;Database=SimpleBank_TransactionsDb;User Id=Test;Password=Test123;TrustServerCertificate=True
+
+  gateway:
+    build:
+      context: .
+      dockerfile: GateWay/Dockerfile
+    ports:
+      - "5000:80"
+
+  react-ui:
+    build:
+      context: ./ReactUI/simplebank-ui
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"

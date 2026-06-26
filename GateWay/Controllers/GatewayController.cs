@@ -2,9 +2,6 @@
 using SimpleBank.Gateway.Services;
 using SimpleBank.Gateway.Models;
 using System.Text.Json;
-using Microsoft.AspNetCore.Authorization;
-
-
 
 namespace SimpleBank.Gateway.Controllers
 {
@@ -16,7 +13,10 @@ namespace SimpleBank.Gateway.Controllers
         private readonly AccountServiceClient _accountService;
         private readonly TransactionServiceClient _transactionService;
 
-        public GatewayController(CustomerServiceClient customerService, AccountServiceClient accountService, TransactionServiceClient transactionService)
+        public GatewayController(
+            CustomerServiceClient customerService,
+            AccountServiceClient accountService,
+            TransactionServiceClient transactionService)
         {
             _customerService = customerService;
             _accountService = accountService;
@@ -29,23 +29,13 @@ namespace SimpleBank.Gateway.Controllers
             return Ok("Gateway is running");
         }
 
-        /*[HttpGet("customers")]
-        public async Task<IActionResult> GetCustomers()
-        {
-            var result = await _customerService.GetCustomersAsync();
-            return Ok(result);
-        }*/
-
-
-
-        [Authorize]
-
+        // ✅ CUSTOMER
         [HttpGet("customers")]
         public async Task<IActionResult> GetCustomers()
         {
             var result = await _customerService.GetCustomersAsync();
 
-            var customers = JsonSerializer.Deserialize<List<CustomerDto>>(
+            /*var customers = JsonSerializer.Deserialize<List<CustomerDto>>(
                 result,
                 new JsonSerializerOptions
                 {
@@ -53,44 +43,53 @@ namespace SimpleBank.Gateway.Controllers
                 });
 
             return Ok(customers);
+            */
+
+            return Content(result, "application/json");
         }
 
-        /*[HttpGet("accounts")]
+        // ✅ ACCOUNT
+        [HttpGet("accounts")]
         public async Task<IActionResult> GetAccounts()
         {
             var result = await _accountService.GetAccountsAsync();
-            return Ok(result);
+
+            /*var accounts = JsonSerializer.Deserialize<List<object>>(
+                result,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+            return Ok(accounts);
+            */
+
+            return Content(result, "application/json");
         }
 
-        [HttpGet("transactions")]
-        public async Task<IActionResult> GetTransactions()
+        
+[HttpPost("transactions")]
+public async Task<IActionResult> CreateTransaction([FromBody] object request)
+{
+    var result = await _transactionService.CreateTransactionAsync(request);
+
+    var transaction = JsonSerializer.Deserialize<object>(result,
+        new JsonSerializerOptions
         {
-            var result = await _transactionService.GetTransactionsAsync();
-            return Ok(result);
-        }*/
-      
+            PropertyNameCaseInsensitive = true
+        });
 
-[HttpGet("accounts")]
-    public async Task<IActionResult> GetAccounts()
-    {
-        var result = await _accountService.GetAccountsAsync();
+    return Ok(transaction);
+}
 
-        var accounts = JsonSerializer.Deserialize<List<object>>(
-            result,
-            new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
 
-        return Ok(accounts);
-    }
-
+        // ✅ TRANSACTION
         [HttpGet("transactions")]
         public async Task<IActionResult> GetTransactions()
         {
             var result = await _transactionService.GetTransactionsAsync();
 
-            var transactions = JsonSerializer.Deserialize<List<object>>(
+            /*var transactions = JsonSerializer.Deserialize<List<object>>(
                 result,
                 new JsonSerializerOptions
                 {
@@ -98,7 +97,9 @@ namespace SimpleBank.Gateway.Controllers
                 });
 
             return Ok(transactions);
-        }
+            */
+            return Content(result, "application/json");
 
+        }
     }
 }

@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: transaction-api
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: transaction-api
+
+  template:
+    metadata:
+      labels:
+        app: transaction-api
+
+    spec:
+      containers:
+        - name: transaction-api
+          image: 175562787706.dkr.ecr.ap-southeast-1.amazonaws.com/transaction-api:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: ASPNETCORE_URLS
+              value: "http://+:80"
+            - name: ConnectionStrings__DefaultConnection
+              value: "Server=database-1.cjkmwk26url7.us-east-2.rds.amazonaws.com;Database=SimpleBank_TransactionsDb;User Id=admin;Password=StrongPassword123!;TrustServerCertificate=True"

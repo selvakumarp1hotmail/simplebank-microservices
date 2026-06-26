@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: account-api
+
+spec:
+  selector:
+    app: account-api
+
+  ports:
+    - port: 80
+      targetPort: 80
+
+  type: ClusterIP

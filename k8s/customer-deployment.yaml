@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: customer-api
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: customer-api
+
+  template:
+    metadata:
+      labels:
+        app: customer-api
+
+    spec:
+      containers:
+        - name: customer-api
+          image: 175562787706.dkr.ecr.ap-southeast-1.amazonaws.com/customer-api:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: ASPNETCORE_URLS
+              value: "http://+:80"            
+            - name: ConnectionStrings__DefaultConnection
+              value: "Server=database-1.cjkmwk26url7.us-east-2.rds.amazonaws.com;Database=SimpleBank_CustomersDb;User Id=admin;Password=StrongPassword123!;TrustServerCertificate=True"

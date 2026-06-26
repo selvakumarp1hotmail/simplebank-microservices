@@ -14,7 +14,20 @@ namespace SimpleBank.Customers.Api.Controllers
         {
             _repo = repo;
         }
+        /* //for Mock Test Only
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            // MOCK DATA (temporary for cloud test)
+            return Ok(new[]
+            {
+                new { id = 1, fullName = "Selva Cloud User" },
+                new { id = 2, fullName = "AWS Test User" }
+            });
+        }
+        */
 
+         //Later enable it after Mock Data Method tested (above)..
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {

@@ -21,6 +21,13 @@ namespace SimpleBank.Transactions.Api.Controllers
             _httpClient = httpClientFactory.CreateClient();
         }
 
+[HttpGet]
+public async Task<IActionResult> GetAll()
+{
+    var txs = await _repo.GetAllAsync();
+    return Ok(txs);
+}
+
         [HttpPost]
         //public async Task<IActionResult> Process(Transaction tx)
         public async Task<IActionResult> Process(CreateTransactionRequest request)
@@ -36,10 +43,11 @@ namespace SimpleBank.Transactions.Api.Controllers
             };
 
             // ✅ rest of your below logic remains SAME
-
-
-            var accountApiUrl = $"http://localhost:5172/api/accounts/{tx.AccountId}";
-
+            
+            //For the Non-docker below-Normal api build before docker
+            //var accountApiUrl = $"http://localhost:5172/api/accounts/{tx.AccountId}";
+            //For the docker below
+            var accountApiUrl = $"http://account-api/api/accounts/{tx.AccountId}";
             // ✅ STEP 1: Get account
             var accountResponse = await _httpClient.GetAsync(accountApiUrl);
 
@@ -66,9 +74,11 @@ namespace SimpleBank.Transactions.Api.Controllers
             // ✅ STEP 3: Update account via API
             var json = JsonSerializer.Serialize(account);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var updateResponse = await _httpClient.PutAsync($"http://localhost:5172/api/accounts/{account.Id}", httpContent);
-
+            //before docker compose below
+            //var updateResponse = await _httpClient.PutAsync($"http://localhost:5172/api/accounts/{account.Id}", httpContent);
+            //After docker compose below
+            var updateResponse = await _httpClient.PutAsync($"http://account-api/api/accounts/{account.Id}", httpContent);
+            
             if (!updateResponse.IsSuccessStatusCode)
                 return BadRequest("Failed to update account");
 

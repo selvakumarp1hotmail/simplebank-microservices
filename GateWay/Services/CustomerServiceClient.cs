@@ -11,10 +11,29 @@ namespace SimpleBank.Gateway.Services
             _httpClient = httpClient;
         }
 
-        public async Task<string> GetCustomersAsync()
+public async Task<string> GetCustomersAsync()
+{
+    var response = await _httpClient.GetAsync("http://customer-api/api/customers");
+
+    response.EnsureSuccessStatusCode();
+
+    return await response.Content.ReadAsStringAsync();
+}
+
+      /*  public async Task<string> GetCustomersAsync()
+{
+    var response = await _httpClient.GetAsync("http://customer-api/api/customers");
+
+    response.EnsureSuccessStatusCode(); // optional but good practice
+
+    return await response.Content.ReadAsStringAsync();
+}*/
+
+        /*public async Task<string> GetCustomersAsync()
         {
-            var response = await _httpClient.GetAsync("http://localhost:5074/api/customers");
+            var response = await _httpClient.GetAsync("http://customer-api/api/customers");
+            //var response = await _httpClient.GetAsync("http://localhost:5074/api/customers");
             return await response.Content.ReadAsStringAsync();
-        }
+        }*/
     }
 }
