@@ -1,6 +1,5 @@
 apiVersion: apps/v1
 kind: Deployment
-
 metadata:
   name: account-api
 
@@ -20,11 +19,16 @@ spec:
       containers:
         - name: account-api
           image: 175562787706.dkr.ecr.ap-southeast-1.amazonaws.com/account-api:latest
+
           ports:
             - containerPort: 80
+
           env:
             - name: ASPNETCORE_URLS
               value: "http://+:80"
+
             - name: ConnectionStrings__DefaultConnection
-              value: "Server=database-1.cjkmwk26url7.us-east-2.rds.amazonaws.com;Database=SimpleBank_AccountsDb;User Id=admin;Password=StrongPassword123!;TrustServerCertificate=True"
-              
+              valueFrom:
+                secretKeyRef:
+                  name: account-db-secret
+                  key: CONNECTION_STRING
