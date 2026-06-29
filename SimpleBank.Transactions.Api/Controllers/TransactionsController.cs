@@ -22,7 +22,7 @@ namespace SimpleBank.Transactions.Api.Controllers
             _httpClient = httpClientFactory.CreateClient();
         }
 
-[Authorize]
+//[Authorize]
 [HttpGet]
 public async Task<IActionResult> GetAll()
 {
