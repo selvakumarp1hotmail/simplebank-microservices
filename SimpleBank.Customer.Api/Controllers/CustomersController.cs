@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SimpleBank.Customers.Api.Domain;
 using SimpleBank.Customers.Api.Persistence;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SimpleBank.Customers.Api.Controllers
 {

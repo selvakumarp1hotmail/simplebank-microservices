@@ -5,6 +5,7 @@ using SimpleBank.Transactions.Api.Persistence;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SimpleBank.Transactions.Api.Controllers
 {

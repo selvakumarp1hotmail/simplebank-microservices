@@ -3,7 +3,7 @@ using SimpleBank.Accounts.Api.Domain;
 using SimpleBank.Accounts.Api.Persistence;
 using System.Net.Http;
 using System.Text.Json;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace SimpleBank.Accounts.Api.Controllers
 {
