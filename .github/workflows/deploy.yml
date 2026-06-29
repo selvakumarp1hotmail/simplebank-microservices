@@ -48,6 +48,13 @@ jobs:
         docker tag transaction-api:latest selvaacr2026.azurecr.io/transaction-api:v1-${{ github.run_number }}
         docker push selvaacr2026.azurecr.io/transaction-api:v1-${{ github.run_number }}
 
+    # ✅ ✅ NEW ✅ Build & Push Gateway
+    - name: Build & Push Gateway
+      run: |
+        docker build -t gateway -f GateWay/Dockerfile .
+        docker tag gateway:latest selvaacr2026.azurecr.io/gateway:v1-${{ github.run_number }}
+        docker push selvaacr2026.azurecr.io/gateway:v1-${{ github.run_number }}
+
     # ✅ Build & Push React UI
     - name: Build & Push React UI
       run: |
@@ -61,6 +68,7 @@ jobs:
         sed -i "s|customer-api:.*|customer-api:v1-${{ github.run_number }}|g" k8s/customer-deployment.yaml
         sed -i "s|account-api:.*|account-api:v1-${{ github.run_number }}|g" k8s/account-deployment.yaml
         sed -i "s|transaction-api:.*|transaction-api:v1-${{ github.run_number }}|g" k8s/transaction-deployment.yaml
+        sed -i "s|gateway:.*|gateway:v1-${{ github.run_number }}|g" k8s/gateway-deployment.yaml
         sed -i "s|react-ui:.*|react-ui:v1-${{ github.run_number }}|g" k8s/webui-deployment.yaml
 
     # ✅ Connect to AKS
@@ -79,6 +87,7 @@ jobs:
         kubectl annotate deployment customer-api kubernetes.io/change-cause="customer-api:v1-${{ github.run_number }}" --overwrite
         kubectl annotate deployment account-api kubernetes.io/change-cause="account-api:v1-${{ github.run_number }}" --overwrite
         kubectl annotate deployment transaction-api kubernetes.io/change-cause="transaction-api:v1-${{ github.run_number }}" --overwrite
+        kubectl annotate deployment gateway kubernetes.io/change-cause="gateway:v1-${{ github.run_number }}" --overwrite
         kubectl annotate deployment web-ui kubernetes.io/change-cause="react-ui:v1-${{ github.run_number }}" --overwrite
 
     # ✅ Restart Pods
