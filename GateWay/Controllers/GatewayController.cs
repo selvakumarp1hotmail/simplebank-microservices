@@ -31,7 +31,7 @@ namespace SimpleBank.Gateway.Controllers
         }
 
         // ✅ CUSTOMER
-        [Authorize]
+        //[Authorize]
         [HttpGet("customers")]
         public async Task<IActionResult> GetCustomers()
         {
@@ -51,7 +51,7 @@ namespace SimpleBank.Gateway.Controllers
         }
 
         // ✅ ACCOUNT
-        [Authorize]
+        //[Authorize]
         [HttpGet("accounts")]
         public async Task<IActionResult> GetAccounts()
         {
@@ -87,7 +87,7 @@ public async Task<IActionResult> CreateTransaction([FromBody] object request)
 
 
         // ✅ TRANSACTION
-        [Authorize]
+        //[Authorize]
         [HttpGet("transactions")]
         public async Task<IActionResult> GetTransactions()
         {
