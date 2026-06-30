@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace SimpleBank.Transactions.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/transactions")]
     public class TransactionsController : ControllerBase

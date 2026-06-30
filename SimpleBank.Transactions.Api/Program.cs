@@ -1,53 +1,64 @@
 using Microsoft.EntityFrameworkCore;
 using SimpleBank.Transactions.Api.Persistence;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ✅ Add Controllers
 builder.Services.AddControllers();
 
-// ✅ Swagger / OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<TransactionDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// ✅ Register Repository (Dependency Injection)
-//builder.Services.AddSingleton<TransactionRepository>();
 builder.Services.AddScoped<TransactionRepository>();
+builder.Services.AddHttpClient();
 
-builder.Services.AddHttpClient(); // needed for Account API calls
-
-
+// ✅ CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReact",
-        policy =>
-        {
-            policy.AllowAnyOrigin()
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
-        });
+    options.AddPolicy("AllowReact", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
 });
 
+// ✅ JWT AUTH
+var key = Encoding.UTF8.GetBytes("THIS_IS_A_LONG_SUPER_SECRET_KEY_123456");
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key)
+    };
+});
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
 app.UseCors("AllowReact");
 
-// ✅ Middleware pipeline
-//if (app.Environment.IsDevelopment())
-//{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-//}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
+// ✅ REQUIRED
+app.UseAuthentication();
 app.UseAuthorization();
 
-// ✅ Map Controllers (VERY IMPORTANT)
 app.MapControllers();
 
 app.Run();
