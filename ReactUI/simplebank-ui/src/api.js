@@ -1,6 +1,26 @@
 // ✅ Correct base URL (points directly to APIs via ingress)
 const BASE_URL = "/api";
 
+// ✅ LOGIN (NEW ✅)
+export async function login(username, password) {
+  const res = await fetch(`/api/auth/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ username, password })
+  });
+
+  if (!res.ok) throw new Error("Login failed");
+
+  const data = await res.json();
+
+  // ✅ Store token
+  localStorage.setItem("token", data.token);
+
+  return data;
+}
+
 // ✅ Helper to attach token
 function getAuthHeaders() {
   const token = localStorage.getItem("token");
