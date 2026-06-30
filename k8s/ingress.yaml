@@ -4,7 +4,6 @@ metadata:
   name: simplebank-ingress
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
 
 spec:
   ingressClassName: nginx
@@ -13,16 +12,30 @@ spec:
     - http:
         paths:
 
-          # ✅ Strip /api prefix before sending to gateway
-          - path: /api(/|$)(.*)
-            pathType: ImplementationSpecific
+          - path: /api/customers
+            pathType: Prefix
             backend:
               service:
-                name: gateway-service
+                name: customer-api
                 port:
                   number: 80
 
-          # ✅ UI
+          - path: /api/accounts
+            pathType: Prefix
+            backend:
+              service:
+                name: account-api
+                port:
+                  number: 80
+
+          - path: /api/transactions
+            pathType: Prefix
+            backend:
+              service:
+                name: transaction-api
+                port:
+                  number: 80
+
           - path: /
             pathType: Prefix
             backend:

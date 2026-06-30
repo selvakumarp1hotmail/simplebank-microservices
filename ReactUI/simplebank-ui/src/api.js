@@ -1,4 +1,5 @@
-const BASE_URL = "/api/gateway";
+// ✅ Correct base URL (points directly to APIs via ingress)
+const BASE_URL = "/api";
 
 // ✅ Helper to attach token
 function getAuthHeaders() {
