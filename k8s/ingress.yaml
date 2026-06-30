@@ -12,6 +12,16 @@ spec:
     - http:
         paths:
 
+          # ✅ AUTH (NEW)
+          - path: /api/auth
+            pathType: Prefix
+            backend:
+              service:
+                name: customer-api
+                port:
+                  number: 80
+
+          # ✅ Customers
           - path: /api/customers
             pathType: Prefix
             backend:
@@ -20,6 +30,7 @@ spec:
                 port:
                   number: 80
 
+          # ✅ Accounts
           - path: /api/accounts
             pathType: Prefix
             backend:
@@ -28,6 +39,7 @@ spec:
                 port:
                   number: 80
 
+          # ✅ Transactions
           - path: /api/transactions
             pathType: Prefix
             backend:
@@ -36,6 +48,16 @@ spec:
                 port:
                   number: 80
 
+          # ✅ Swagger (NEW)        
+          - path: /swagger
+            pathType: Prefix
+            backend:
+              service:
+                name: customer-api
+                port:
+                  number: 80
+
+          # ✅ UI
           - path: /
             pathType: Prefix
             backend:

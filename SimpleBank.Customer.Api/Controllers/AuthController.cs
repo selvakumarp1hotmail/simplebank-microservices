@@ -13,20 +13,31 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginRequest request)
     {
-        if (request.Username != "admin" || request.Password != "password")
-            return Unauthorized();
+        try
+        {
+            if (request == null)
+                return BadRequest("Invalid request");
 
-        var token = GenerateToken(request.Username);
+            if (request.Username != "admin" || request.Password != "password")
+                return Unauthorized();
 
-        return Ok(new { token });
+            var token = GenerateToken(request.Username);
+
+            return Ok(new { token });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"ERROR: {ex.Message}");
+        }
     }
 
     private string GenerateToken(string username)
     {
-        var key = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes("SUPER_SECRET_KEY_123"));
+        var keyString = "THIS_IS_A_LONG_SUPER_SECRET_KEY_123456"; // 🔥 IMPORTANT (LONG KEY)
+        var key = Encoding.UTF8.GetBytes(keyString);
 
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var securityKey = new SymmetricSecurityKey(key);
+        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
         var claims = new[]
         {
@@ -34,13 +45,13 @@ public class AuthController : ControllerBase
             new Claim(ClaimTypes.Role, "Admin")
         };
 
-        var token = new JwtSecurityToken(
+        var tokenDescriptor = new JwtSecurityToken(
             claims: claims,
-            expires: DateTime.UtcNow.AddHours(1),
-            signingCredentials: creds
+            expires: DateTime.UtcNow.AddMinutes(60),
+            signingCredentials: credentials
         );
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
     }
 }
 
